@@ -1,0 +1,8 @@
+<!doctype html>
+<title>Form demo</title>
+
+<form method="POST" action="">
+    {{ form.csrf_token }}
+    {{ form.name.label }} {{ form.name(size=20) }}
+    <input type="submit" value="Submit">
+</form>

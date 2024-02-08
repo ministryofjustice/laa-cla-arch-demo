@@ -1,0 +1,5 @@
+flask
+wtforms
+
+# monolith
+Flask-SQLAlchemy
