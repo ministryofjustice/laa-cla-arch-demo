@@ -1,0 +1,3 @@
+# versions to match cla_backend
+Django==1.8.19
+djangorestframework==3.3.3
