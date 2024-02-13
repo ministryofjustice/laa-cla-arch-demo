@@ -60,3 +60,18 @@ source venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
+
+Create the database table:
+
+```
+python manage.py migrate
+```
+
+## Run
+
+```
+cd drf_app
+source venv/bin/activate
+./manage.py runserver 5001 --traceback
+```
+Browse it: http://127.0.0.1:5001

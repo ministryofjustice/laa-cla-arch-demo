@@ -3,6 +3,7 @@ from monolith_model import db, Case
 
 from flask import Flask, render_template, request, flash
 from flask_sqlalchemy import SQLAlchemy
+import requests
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import select
 
@@ -38,16 +39,40 @@ def form1():
             # amend existing case
             case.name = form.name.data
         db.session.commit()
-        flash('Saved!')
+        print('Saved!')
     elif case:
         form.name.data = case.name
     return render_template('form.html', form=form)
 
-@app.route("/flask_and_drf")
+DRF_APP_BASE_URL = "http://localhost:5001"
+
+@app.route("/flask_and_drf", methods=['GET', 'POST'])
 def form2():
-    return "<p>Hello, World!</p>"
+    form = CaseForm(request.form)
+    case_response = requests.get(DRF_APP_BASE_URL + "/case")
+    case_response.raise_for_status()
+    case = case_response.json()
+    if request.method == 'POST' and form.validate():
+        if not case:
+            # create case
+            # case = Case(name=form.name.data)
+            case = {"name": form.name.data}
+            response = requests.post(DRF_APP_BASE_URL + "/case/", json=case)
+            if response.status_code == 201:
+                print('Saved!')
+            else:
+                raise requests.HTTPError(response.status_code)
+        else:
+            # amend existing case
+            case.name = form.name.data
+        db.session.commit()
+        flash('Saved!')
+    elif case:
+        breakpoint()
+        form.name.data = case.name
+    return render_template('form.html', form=form)
 
 
-@app.route("/flask_and_fastapi")
+@app.route("/flask_and_fastapi", methods=['GET', 'POST'])
 def form3():
     return "<p>Hello, World!</p>"
